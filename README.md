@@ -205,5 +205,5 @@ This project is licensed under the **MIT License**
 
 ## ✨ Author
 
-Made with ❤️ by \[Abhishek Yadav]
+Made with ❤️ by \Abhishek Yadav
 
