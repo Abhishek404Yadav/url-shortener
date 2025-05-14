@@ -11,11 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.roadmap.url_shortner.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 /**
  * Controller for handling HTTP requests related to URL shortening.
  */
@@ -25,14 +20,13 @@ import java.util.stream.Collectors;
 public class UrlShortenerController {
 
     private final UrlShortenerService service;
-    private final UrlShortnerUtil util;
+    private final UrlShortnerMapping util;
 
     /**
      * Creates a new short URL from the provided original URL.
      */
     @PostMapping("/shorten")
     public ResponseEntity<?> handleCreateShortUrl(@Valid @RequestBody UrlMapping urlMapping, BindingResult result) {
-        if (result.hasErrors()) return ResponseEntity.badRequest().body(util.formatErrors(result));
         UrlMapping saved = service.createShortUrl(urlMapping.getUrl());
         return ResponseEntity.status(HttpStatus.CREATED).body(util.toDto(saved));
     }
@@ -64,7 +58,6 @@ public class UrlShortenerController {
      */
     @PutMapping("/shorten/{shortCode}")
     public ResponseEntity<?> handleUpdateShortUrl(@PathVariable String shortCode, @Valid @RequestBody UrlMapping urlMapping, BindingResult result) {
-        if (result.hasErrors()) return ResponseEntity.badRequest().body(util.formatErrors(result));
         return service.updateShortUrl(shortCode, urlMapping.getUrl())
                 .map(updated -> ResponseEntity.ok(util.toDto(updated)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -86,12 +79,9 @@ public class UrlShortenerController {
     @GetMapping("/shorten/{shortCode}/stats")
     public ResponseEntity<?> handleGetShortUrlStats(@PathVariable String shortCode) {
         return service.getUrlStats(shortCode)
-                .map(mapping -> {
-                    Map<String, Object> dto = util.toDto(mapping);
-                    dto.put("accessCount", mapping.getAccessCount());
-                    return ResponseEntity.ok(dto);
-                })
+                .map(mapping -> ResponseEntity.ok(util.toStatsDto(mapping)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
 }

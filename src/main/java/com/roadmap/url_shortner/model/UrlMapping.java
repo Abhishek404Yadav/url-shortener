@@ -2,6 +2,7 @@ package com.roadmap.url_shortner.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class UrlMapping {
 
     @NotBlank(message = "URL is required")
     @Pattern(
-            regexp = "^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$",
+            regexp = "^(https?://)([\\w\\-]+\\.)+[\\w\\-]+(:\\d+)?(/\\S*)?$",
             message = "Invalid URL format"
     )
     @Column(nullable = false)
