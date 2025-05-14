@@ -7,11 +7,7 @@ import com.roadmap.url_shortner.util.GenerateShortCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service layer for managing URL mappings and short codes.
@@ -22,8 +18,6 @@ public class UrlShortenerService {
 
     private final UrlMappingRepository repository;
     private final GenerateShortCode gsc;
-    private final SecureRandom random = new SecureRandom();
-
     /**
      * Creates a short code and stores the mapping.
      */
